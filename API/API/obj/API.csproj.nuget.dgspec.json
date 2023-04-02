@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ryanh\\Portfolio\\API\\API\\API.csproj": {}
+    "C:\\Users\\ryanh\\Portfolio\\MedFullStack\\API\\API\\API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ryanh\\Portfolio\\API\\API\\API.csproj": {
+    "C:\\Users\\ryanh\\Portfolio\\MedFullStack\\API\\API\\API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ryanh\\Portfolio\\API\\API\\API.csproj",
+        "projectUniqueName": "C:\\Users\\ryanh\\Portfolio\\MedFullStack\\API\\API\\API.csproj",
         "projectName": "API",
-        "projectPath": "C:\\Users\\ryanh\\Portfolio\\API\\API\\API.csproj",
+        "projectPath": "C:\\Users\\ryanh\\Portfolio\\MedFullStack\\API\\API\\API.csproj",
         "packagesPath": "C:\\Users\\ryanh\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ryanh\\Portfolio\\API\\API\\obj\\",
+        "outputPath": "C:\\Users\\ryanh\\Portfolio\\MedFullStack\\API\\API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ryanh\\AppData\\Roaming\\NuGet\\NuGet.Config",
