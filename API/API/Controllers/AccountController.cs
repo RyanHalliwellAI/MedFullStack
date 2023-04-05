@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 
@@ -51,11 +53,53 @@ namespace API.Controllers
             return Ok("Account created!");
 
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginToAccount([FromBody] AccountRequestLogin request)
+        {
+            string email;
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                // Check if the username or email exists in Database
+                var checkQuery = "SELECT PasswordHash FROM Users WHERE Email = @Email";
+                using (var command = new SqlCommand(checkQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@Email", request.Email);
+                    email = request.Email;
+                    var result = await command.ExecuteScalarAsync();
+                    // No matching user found
+                    if (result == null)
+                    {
+                        return Unauthorized("Invalid Email.");
+                    }
+                    var storedPasswordHash = result.ToString();
+
+                    // Compare provided password hash with stored hash
+                    if (storedPasswordHash != request.PasswordHash)
+                    {
+                        return Unauthorized("Invalid password.");
+                    }
+                }
+            }
+
+            return Ok("Login successful!" +email);
+        }
+
         public class AccountRequest
         {
             public string Username { get; set; }
             public string Email { get; set; }
             public string PasswordHash { get; set; }
         }
+
+        public class AccountRequestLogin
+        {
+            public string Email { get; set; }
+            public string PasswordHash { get; set; }
+        }
+
+
     }
 }
