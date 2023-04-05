@@ -1,6 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.FileProviders;
-using System.IO;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,13 +10,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Add CORS policy - allowing the api to be used between two programs
+// Add CORS policy
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
         builder =>
         {
-            builder.WithOrigins("http://localhost:3002")
+            builder.WithOrigins("http://localhost:3000")
                    .AllowAnyMethod()
                    .AllowAnyHeader();
         });
@@ -30,13 +31,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Apply CORS policy
+// Apply CORS policy before other middlewares
 app.UseCors("AllowFrontend");
 
-app.UseAuthorization();
+app.UseHttpsRedirection(); // Redirect HTTP to HTTPS
+app.UseStaticFiles(); // Serve static files (if any)
 
-app.UseStaticFiles(); // Default static files middleware
-//The photo direcotry to save employee photos
+// Middleware for error handling in production
+app.UseExceptionHandler("/Home/Error");
+app.UseHsts(); // Use HTTP Strict Transport Security
+
+app.UseAuthorization();
 
 app.MapControllers();
 
