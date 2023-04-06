@@ -84,7 +84,7 @@ namespace API.Controllers
                 }
             }
 
-            return Ok("Login successful!" +email);
+            return Ok(email);
         }
 
         public class AccountRequest
