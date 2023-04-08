@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
+
 function Login() {
-    const [email, setEmail] = useState('');
+  //setting up email and password attributes  
+  const [email, setEmail] = useState('');
     const [passwordHash, setPassword] = useState('');
     const [message, setMessage] = useState('');
+    //Adding nagivation to home
+    const navigate = useNavigate();
 
 
+    // event listener to fetch from the API and return the result
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -20,10 +26,15 @@ function Login() {
             body: JSON.stringify({ email, passwordHash }),
           });
           const result = await response.text();
-          setMessage(result);
+          if (response.ok) {
+            localStorage.setItem('userEmail', email);
+            navigate('/home', { state: { message: result } });
+        } else {
+            setMessage(result);
+        }
         };
 
-
+  //html code to display input for user.
   return (
     <div className="App container">
       <h3 className="d-flex justify-content-center m-3">Login</h3>
