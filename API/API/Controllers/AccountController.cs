@@ -39,12 +39,14 @@ namespace API.Controllers
                     }
                 }
                 // Insert new user to Database
-                var insertQuery = "INSERT INTO Users (Username, Email, PasswordHash) VALUES (@Username, @Email, @PasswordHash)";
+                var insertQuery = "INSERT INTO Users (Username, Email, PasswordHash, UserRole) VALUES (@Username, @Email, @PasswordHash, @UserRole)";
                 using (var command = new SqlCommand(insertQuery, connection))
                 {
                     command.Parameters.AddWithValue("@Username", request.Username);
                     command.Parameters.AddWithValue("@Email", request.Email);
                     command.Parameters.AddWithValue("@PasswordHash", request.PasswordHash); //will hash later
+                    command.Parameters.AddWithValue("@UserRole", request.UserRole);
+
 
                     await command.ExecuteNonQueryAsync();
                 }
@@ -92,6 +94,7 @@ namespace API.Controllers
             public string Username { get; set; }
             public string Email { get; set; }
             public string PasswordHash { get; set; }
+            public string UserRole { get; set; }
         }
 
         public class AccountRequestLogin

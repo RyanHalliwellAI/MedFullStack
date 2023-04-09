@@ -9,6 +9,7 @@ function CreateAccount() {
   const [email, setEmail] = useState('');
   const [passwordHash, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [role, setRole] = useState('user');
 
   // preventing default event listener
   const handleSubmit = async (e) => {
@@ -20,7 +21,7 @@ function CreateAccount() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ username, email, passwordHash }),
+      body: JSON.stringify({ username, email, passwordHash, userRole: role }),
     });
     const result = await response.text();
     setMessage(result);
@@ -66,6 +67,18 @@ function CreateAccount() {
             value={passwordHash}
             onChange={(e) => setPassword(e.target.value)}
              />
+          </div>
+          <div className="form-group form-check">
+            <input
+              type="checkbox"
+              className="form-check-input"
+              id="roleCheck"
+              checked={role === 'admin'}
+              onChange={(e) => setRole(e.target.checked ? 'admin' : 'user')}
+            />
+            <label className="form-check-label" htmlFor="roleCheck">
+              Set as Admin
+            </label>
           </div>
           <button type="submit" className="btn btn-primary">Submit</button>
         </form>
