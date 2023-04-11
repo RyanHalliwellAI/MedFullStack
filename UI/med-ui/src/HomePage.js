@@ -5,20 +5,24 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Home() {
     const [message, setMessage] = useState('Welcome!');
+    const [userRole, setUserRole] = useState(null);
     const navigate = useNavigate();
 
 
     //gets login from local storage
     useEffect(() => {
       const userEmail = localStorage.getItem('userEmail');
+      const userRole = localStorage.getItem('userRole');
       if (userEmail) {
         setMessage(`Logged in as ${userEmail}`);
+        setUserRole(userRole);
       }
-    }, []);
+    }, [navigate]);
 
     //handling the logout logic.
     const handleLogout = () => {
         localStorage.removeItem('userEmail');
+        localStorage.removeItem('userRole'); 
         navigate('/login');
       };
 
@@ -29,8 +33,9 @@ function Home() {
         <div className="App container">
             <h3 className="d-flex justify-content-center m-3">Home</h3>
             <div className="d-flex justify-content-center">
-                <p>{message}</p>
+                <p>{message}{userRole}</p>
             </div>
+            {userRole === 'admin' && <h1 className="d-flex justify-content-center m-3">Admin Dashboard</h1>}
             <div className="d-flex justify-content-center">
                 <button className="btn btn-danger" onClick={handleLogout}>Logout</button>
             </div>

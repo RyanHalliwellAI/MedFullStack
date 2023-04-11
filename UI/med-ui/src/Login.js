@@ -10,6 +10,7 @@ function Login() {
   const [email, setEmail] = useState('');
     const [passwordHash, setPassword] = useState('');
     const [message, setMessage] = useState('');
+
     //Adding nagivation to home
     const navigate = useNavigate();
 
@@ -23,11 +24,16 @@ function Login() {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email, passwordHash }),
+            body: JSON.stringify({ email, passwordHash}),
           });
-          const result = await response.text();
+          const resultText = await response.text();
+          console.log(resultText);
+
+          const jsonString = resultText.match(/\{.*\}/)[0];
+          const result = JSON.parse(jsonString);
           if (response.ok) {
             localStorage.setItem('userEmail', email);
+            localStorage.setItem('userRole', result.role);
             navigate('/home', { state: { message: result } });
         } else {
             setMessage(result);

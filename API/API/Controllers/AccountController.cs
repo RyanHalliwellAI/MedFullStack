@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using API.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System.ComponentModel.DataAnnotations;
@@ -65,28 +66,37 @@ namespace API.Controllers
                 await connection.OpenAsync();
 
                 // Check if the username or email exists in Database
-                var checkQuery = "SELECT PasswordHash FROM Users WHERE Email = @Email";
+                var checkQuery = "SELECT PasswordHash, UserRole FROM Users WHERE Email = @Email";
                 using (var command = new SqlCommand(checkQuery, connection))
                 {
                     command.Parameters.AddWithValue("@Email", request.Email);
-                    email = request.Email;
-                    var result = await command.ExecuteScalarAsync();
-                    // No matching user found
-                    if (result == null)
-                    {
-                        return Unauthorized("Invalid Email.");
-                    }
-                    var storedPasswordHash = result.ToString();
 
-                    // Compare provided password hash with stored hash
-                    if (storedPasswordHash != request.PasswordHash)
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
-                        return Unauthorized("Invalid password.");
+                        if (await reader.ReadAsync())
+                        {
+                            var storedPasswordHash = reader["PasswordHash"].ToString();
+                            var userRole = reader["UserRole"].ToString();
+
+
+                            // Compare provided password hash with stored hash
+                            if (storedPasswordHash != request.PasswordHash)
+                            {
+                                return Unauthorized("Invalid password.");
+                            }
+
+                            // Login successful
+                            return Ok(new { email = request.Email, role = userRole });
+                        }
+                        else
+                        {
+                            return Unauthorized("Invalid Email.");
+                        }
+
                     }
                 }
             }
 
-            return Ok(email);
         }
 
         public class AccountRequest
@@ -101,6 +111,7 @@ namespace API.Controllers
         {
             public string Email { get; set; }
             public string PasswordHash { get; set; }
+
         }
 
 
