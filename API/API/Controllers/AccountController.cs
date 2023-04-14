@@ -98,6 +98,12 @@ namespace API.Controllers
             }
 
         }
+        [HttpPost("appointment/create")]
+        public async Task<IActionResult> CreateAppointment([FromBody] Appointment request)
+        {
+            return "";
+        }
+
 
         public class AccountRequest
         {
@@ -112,6 +118,14 @@ namespace API.Controllers
             public string Email { get; set; }
             public string PasswordHash { get; set; }
 
+        }
+        public class Appointment
+        {
+            public int AppointmentId { get; set; }
+            public string Doctor { get; set; }
+            public string PatientName { get; set; }
+            public DateTime AppointmentDate { get; set; }
+            public string Description { get; set; }
         }
 
 
