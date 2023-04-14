@@ -35,7 +35,21 @@ function Home() {
             <div className="d-flex justify-content-center">
                 <p>{message}{userRole}</p>
             </div>
-            {userRole === 'admin' && <h1 className="d-flex justify-content-center m-3">Admin Dashboard</h1>}
+            {userRole === 'admin' && 
+            <div>
+            <h1 className="d-flex justify-content-center m-3">Admin Dashboard</h1>
+            <h2>Create Appointments</h2>
+                </div>
+            
+            
+            }
+            {userRole === 'user' && 
+            <div>
+            <h1 className="d-flex justify-content-center m-3">Default Dashboard</h1>
+            <h2>Choose Appointment</h2>
+            </div>
+            }
+
             <div className="d-flex justify-content-center">
                 <button className="btn btn-danger" onClick={handleLogout}>Logout</button>
             </div>
