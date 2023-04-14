@@ -1,8 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+
+export class Admin extends Component
+{
+    constructor(props){
+        super(props);
+        this.state={
+            doctor:"",
+            doctorID:0, 
+            modalTitle:"",
+            hospital:"IT",
+            paintentName: "",
+            patientID: 0
+    }
+}
+}
 function Home() {
     const [message, setMessage] = useState('Welcome!');
     const [userRole, setUserRole] = useState(null);
@@ -39,6 +54,9 @@ function Home() {
             <div>
             <h1 className="d-flex justify-content-center m-3">Admin Dashboard</h1>
             <h2>Create Appointments</h2>
+                
+                
+                
                 </div>
             
             
