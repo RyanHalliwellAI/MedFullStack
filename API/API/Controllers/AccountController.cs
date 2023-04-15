@@ -101,6 +101,27 @@ namespace API.Controllers
         [HttpPost("appointment/create")]
         public async Task<IActionResult> CreateAppointment([FromBody] Appointment request)
         {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                var insertQuery = "INSERT INTO Appointments (Doctor, PatientName, AppointmentDate, Description) VALUES (@Doctor, @PatientName, @AppointmentDate, @Description)";
+                using (var command = new SqlCommand(insertQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@Doctor", request.Doctor);
+                    command.Parameters.AddWithValue("@PatientName", request.PatientName);
+                    command.Parameters.AddWithValue("@AppointmentDate", request.AppointmentDate);
+                    command.Parameters.AddWithValue("@Description", request.Description);
+
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+            return Ok("Appointment created!");
+        }
+
+        [HttpGet("appointment")]
+        public async Task<IActionResult> GetAppointments()
+        {
             return "";
         }
 
