@@ -71,6 +71,35 @@ createClick() {
             alert('Failed');
         });
 }
+render() {
+    const { appointments, modalTitle, appointmentId, doctor, hospital, patientName } = this.state;
+    return (
+        <div>
+        <button type="button"
+            className="btn btn-primary m-2 float-end"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+            onClick={() => this.addClick()}>
+            Add Appointment
+        </button>
+        <table className="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Appointment ID</th>
+                            <th>Doctor</th>
+                            <th>Hospital</th>
+                            <th>Patient Name</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                        </table>
+        </div>
+    );
+
+}
+    
 }
 function Home() {
     const [message, setMessage] = useState('Welcome!');
