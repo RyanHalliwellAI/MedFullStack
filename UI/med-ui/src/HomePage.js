@@ -25,6 +25,52 @@ refreshList() {
             this.setState({ appointments: data });
         });
 }
+componentDidMount() {
+    this.refreshList();
+}
+
+changeDoctor = (e) => {
+    this.setState({ doctor: e.target.value });
+}
+
+changeHospital = (e) => {
+    this.setState({ hospital: e.target.value });
+}
+
+changePatientName = (e) => {
+    this.setState({ patientName: e.target.value });
+}
+addClick() {
+    this.setState({
+        modalTitle: "Add Appointment",
+        appointmentId: 0,
+        doctor: "",
+        hospital: "",
+        patientName: ""
+    });
+}
+//create appointment and send to sql
+createClick() {
+    fetch('http://localhost:5041/api/account/appointment', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            doctor: this.state.doctor,
+            hospital: this.state.hospital,
+            patientName: this.state.patientName
+        })
+    })
+        .then(res => res.json())
+        .then((result) => {
+            alert("Created");
+            this.refreshList();
+        }, (error) => {
+            alert('Failed');
+        });
+}
 }
 function Home() {
     const [message, setMessage] = useState('Welcome!');
