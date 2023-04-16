@@ -122,7 +122,31 @@ namespace API.Controllers
         [HttpGet("appointment")]
         public async Task<IActionResult> GetAppointments()
         {
-            return "";
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                var query = "SELECT * FROM Appointments";
+                using (var command = new SqlCommand(query, connection))
+                {
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        var appointments = new List<Appointment>();
+                        while (await reader.ReadAsync())
+                        {
+                            appointments.Add(new Appointment
+                            {
+                                AppointmentId = reader.GetInt32(0),
+                                Doctor = reader.GetString(1),
+                                PatientName = reader.GetString(2),
+                                AppointmentDate = reader.GetDateTime(3),
+                                Description = reader.GetString(4)
+                            });
+                        }
+                        return Ok(appointments);
+                    }
+                }
+            }
         }
 
 

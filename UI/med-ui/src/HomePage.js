@@ -9,13 +9,21 @@ export class Admin extends Component
     constructor(props){
         super(props);
         this.state={
-            doctor:"",
-            doctorID:0, 
+            appointments: [],
             modalTitle:"",
-            hospital:"IT",
-            paintentName: "",
-            patientID: 0
-    }
+            appointmentId: 0,
+            doctor: "",
+            hospital: "",
+            patientName: ""
+    };  
+}
+refreshList() {
+    // Fetch appointments from API
+    fetch('http://localhost:5041/api/account/appointment')
+        .then(response => response.json())
+        .then(data => {
+            this.setState({ appointments: data });
+        });
 }
 }
 function Home() {
