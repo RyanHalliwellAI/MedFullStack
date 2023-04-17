@@ -83,19 +83,67 @@ render() {
             Add Appointment
         </button>
         <table className="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Appointment ID</th>
-                            <th>Doctor</th>
-                            <th>Hospital</th>
-                            <th>Patient Name</th>
-                            <th>Options</th>
-                        </tr>
-                    </thead>
+            <thead>
+                <tr>
+                    <th>Appointment ID</th>
+                    <th>Doctor</th>
+                    <th>Hospital</th>
+                    <th>Patient Name</th>
+                    <th>Options</th>
+                </tr>
+            </thead>
                     <tbody>
-                        </tbody>
-                        </table>
+                    {appointments.map(app =>
+                        <tr key={app.appointmentId}>
+                            <td>{app.appointmentId}</td>
+                            <td>{app.doctor}</td>
+                            <td>{app.hospital}</td>
+                            <td>{app.patientName}</td>
+                            </tr>
+                    )}
+                    </tbody>
+        </table>
+        {/* popup for adding appointment */}
+        <div className="modal fade" id="exampleModal" tabIndex="-1" aria-hidden="true">
+            <div className="modal-dialog modal-lg modal-dialog-centered">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title">{modalTitle}</h5>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div className="modal-body">
+                                <div className="input-group mb-3">
+                                    <span className="input-group-text">Doctor</span>
+                                    <input type="text" className="form-control"
+                                        value={doctor}
+                                        onChange={this.changeDoctor} />
+                                </div>
+                                <div className="input-group mb-3">
+                                    <span className="input-group-text">Hospital</span>
+                                    <input type="text" className="form-control"
+                                        value={hospital}
+                                        onChange={this.changeHospital} />
+                                </div>
+                                <div className="input-group mb-3">
+                                    <span className="input-group-text">Patient Name</span>
+                                    <input type="text" className="form-control"
+                                        value={patientName}
+                                        onChange={this.changePatientName} />
+                                </div>
+                                {appointmentId === 0 ?
+                                    <button type="button"
+                                        className="btn btn-primary float-start"
+                                        onClick={() => this.createClick()}>
+                                        Create
+                                    </button>
+                                    : null}
+                    </div>
+
+                </div>
+            </div>
         </div>
+
+    </div>
     );
 
 }
