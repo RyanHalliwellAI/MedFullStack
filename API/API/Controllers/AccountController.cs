@@ -101,6 +101,18 @@ namespace API.Controllers
         [HttpPost("appointment/create")]
         public async Task<IActionResult> CreateAppointment([FromBody] Appointment request)
         {
+            if (request == null)
+            {
+                return BadRequest("Appointment data is required.");
+            }
+            if (string.IsNullOrEmpty(request.Doctor) ||
+                 string.IsNullOrEmpty(request.PatientName) ||
+                 request.AppointmentDate == default ||
+                 string.IsNullOrEmpty(request.Description))
+            {
+                return BadRequest("All fields are required.");
+            }
+
             using (var connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
@@ -113,7 +125,16 @@ namespace API.Controllers
                     command.Parameters.AddWithValue("@AppointmentDate", request.AppointmentDate);
                     command.Parameters.AddWithValue("@Description", request.Description);
 
-                    await command.ExecuteNonQueryAsync();
+                    try
+                    {
+                        await command.ExecuteNonQueryAsync();
+                    }
+                    catch (SqlException ex)
+                    {
+                        return StatusCode(StatusCodes.Status500InternalServerError, "Database operation failed.");
+
+                    }
+
                 }
             }
             return Ok("Appointment created!");
