@@ -170,6 +170,60 @@ namespace API.Controllers
             }
         }
 
+        [HttpPut("appointment/update")]
+        public async Task<IActionResult> UpdateAppointment([FromBody] Appointment request)
+        {
+            if (request == null)
+            {
+                return BadRequest("Appointment data is required.");
+            }
+            if (request.AppointmentId <= 0 ||
+                string.IsNullOrEmpty(request.Doctor) ||
+                string.IsNullOrEmpty(request.PatientName) ||
+                request.AppointmentDate == default ||
+                string.IsNullOrEmpty(request.Description))
+            {
+                return BadRequest("All fields are required and appointment ID must be valid.");
+            }
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                var updateQuery = @"
+                    UPDATE Appointments
+                    SET Doctor = @Doctor, 
+                        PatientName = @PatientName, 
+                        AppointmentDate = @AppointmentDate, 
+                        Description = @Description
+                    WHERE AppointmentId = @AppointmentId";
+
+                using (var command = new SqlCommand(updateQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@AppointmentId", request.AppointmentId);
+                    command.Parameters.AddWithValue("@Doctor", request.Doctor);
+                    command.Parameters.AddWithValue("@PatientName", request.PatientName);
+                    command.Parameters.AddWithValue("@AppointmentDate", request.AppointmentDate);
+                    command.Parameters.AddWithValue("@Description", request.Description);
+
+                    try
+                    {
+                        var rowsAffected = await command.ExecuteNonQueryAsync();
+                        if (rowsAffected == 0)
+                        {
+                            return NotFound("Appointment not found.");
+                        }
+                    }
+                    catch (SqlException ex)
+                    {
+                        return StatusCode(StatusCodes.Status500InternalServerError, "Database operation failed.");
+                    }
+                }
+            }
+            return Ok("Appointment updated successfully!");
+        }
+
+
 
         public class AccountRequest
         {
