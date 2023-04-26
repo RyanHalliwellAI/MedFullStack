@@ -223,6 +223,41 @@ namespace API.Controllers
             return Ok("Appointment updated successfully!");
         }
 
+        [HttpDelete("appointment/delete/{id}")]
+        public async Task<IActionResult> DeleteAppointment(int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Invalid appointment ID.");
+            }
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                var deleteQuery = "DELETE FROM Appointments WHERE AppointmentId = @AppointmentId";
+                using (var command = new SqlCommand(deleteQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@AppointmentId", id);
+
+                    try
+                    {
+                        var rowsAffected = await command.ExecuteNonQueryAsync();
+                        if (rowsAffected == 0)
+                        {
+                            return NotFound("Appointment not found.");
+                        }
+                    }
+                    catch (SqlException ex)
+                    {
+                        return StatusCode(StatusCodes.Status500InternalServerError, "Database operation failed.");
+                    }
+                }
+            }
+
+            return Ok("Appointment deleted successfully!");
+        }
+
 
 
         public class AccountRequest
