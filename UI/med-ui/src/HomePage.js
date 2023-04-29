@@ -297,7 +297,7 @@ function Home() {
             
             
             }
-            {userRole === 'user' && 
+            {userRole === 'default' && 
             <div>
             <h1 className="d-flex justify-content-center m-3">Default Dashboard</h1>
             <h2>Choose Appointment</h2>
