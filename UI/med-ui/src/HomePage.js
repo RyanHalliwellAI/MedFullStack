@@ -2,6 +2,7 @@ import React, { Component, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import SelectAppointment from './SelectAppointment';
 
 
 export class Admin extends Component
@@ -301,6 +302,8 @@ function Home() {
             <div>
             <h1 className="d-flex justify-content-center m-3">Default Dashboard</h1>
             <h2>Choose Appointment</h2>
+            <SelectAppointment />
+
             </div>
             }
 
