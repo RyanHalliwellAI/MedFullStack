@@ -44,4 +44,3 @@ function SymptomInput()
 
 export default SymptomInput;
 
-}
