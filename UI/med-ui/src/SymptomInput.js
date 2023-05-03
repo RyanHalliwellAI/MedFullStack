@@ -8,9 +8,22 @@ function SymptomInput()
     const handleInputChange = (e) => {
         setSymptoms(e.target.value);
     };
-
-    const handleButtonClick = () => {
-        setOutput(symptoms);
+    const handleButtonClick = async () => {
+        // Send symptoms to the backend
+        try {
+            const response = await fetch('http://127.0.0.1:5000/process_symptoms', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ symptoms }),
+            });
+            
+            const data = await response.json();
+            setOutput(data.result);
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     return (
