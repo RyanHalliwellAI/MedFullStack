@@ -2,17 +2,17 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # This will enable CORS for all routes
-def check_symptoms(symptoms):
-    symptoms = symptoms.lower()
+CORS(app)  
+def check_symptoms(symptoms):  
+    symptom_set = set(symptoms)
     
-    if "fever" in symptoms and "cough" in symptoms and "fatigue" in symptoms:
+    if {"fever", "cough", "fatigue"}.issubset(symptom_set):
         return "You may have the flu."
-    elif "sneezing" in symptoms and "itchy eyes" in symptoms and "runny nose" in symptoms:
+    elif {"sneezing", "itchy_eyes", "runny_nose"}.issubset(symptom_set):
         return "You may have allergies."
-    elif "fever" in symptoms and "dry cough" in symptoms and "loss of taste" in symptoms:
+    elif {"fever", "dry_cough", "loss_of_taste"}.issubset(symptom_set):
         return "You may have COVID-19."
-    elif "sore throat" in symptoms and "runny nose" in symptoms and "mild fever" in symptoms:
+    elif {"sore_throat", "runny_nose", "fever"}.issubset(symptom_set):
         return "You may have a common cold."
     else:
         return "Your symptoms are not recognized. Please consult a doctor."
@@ -20,7 +20,7 @@ def check_symptoms(symptoms):
 @app.route('/process_symptoms', methods=['POST'])
 def process_symptoms():
     data = request.json
-    symptoms = data.get('symptoms')
+    symptoms = data.get('symptoms', '').split(', ')
 
     result = check_symptoms(symptoms)
     
